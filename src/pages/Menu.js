@@ -1,4 +1,5 @@
 import React from 'react';
+import ItemCard from '../components/ItemCard';
 
 const Menu = ({ history }) => {
     return (
@@ -8,6 +9,17 @@ const Menu = ({ history }) => {
                 <div>
                     <button onClick={() => history.push('/AddMenuItem')}>Add menu item</button>
                 </div>
+            </section>
+            <section className="cards-wrapper">
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
+                <ItemCard />
             </section>
         </main>
     )

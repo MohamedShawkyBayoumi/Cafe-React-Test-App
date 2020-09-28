@@ -48,3 +48,63 @@ button {
 button:hover {
   background-color: #69a2ff;
 }
+
+.cards-wrapper {
+  display: flex;
+  margin: 15px;
+  flex-wrap: wrap;
+}
+
+.item-card {
+  flex: 0 1 calc(33.33% - 2.5em);
+  max-width: calc(33.33% - 2.5em);
+  margin: 15px;
+}
+
+.card-img {
+  background-color: #43425d;
+  height: 200px;
+  background-size: cover !important;
+}
+
+.card-info {
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+}
+
+.card-info h4,
+.card-info h3,
+.card-info h5 {
+  margin: 0;
+}
+
+.card-info h4 {
+  color: #7c7e89;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.card-info h3 {
+  color: #4d4f5c;
+  font-size: 14px;
+}
+
+.card-info h5 {
+  color: #7c7e89;
+  font-weight: 400;
+}
+
+@media(max-width: 768px){
+
+  main {
+    padding: 0 20px;
+  }
+
+  .item-card {
+    flex: 0 1 calc(50% - 2.5em);
+    max-width: calc(50% -  2.5em);
+  }
+}
