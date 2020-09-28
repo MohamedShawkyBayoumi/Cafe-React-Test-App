@@ -2,6 +2,7 @@ header {
   padding: 20px 20px;
   background-color: #fff;
   box-shadow: 0 0 10px #d6d6e2;
+  margin-bottom: 25px;
 }
 
 header h3 {
@@ -11,8 +12,39 @@ header h3 {
 header h3 a {
   text-decoration: none;
   color: #43425d;
+  letter-spacing: 3px;
 }
 
 header h3 a:hover {
   color: #7d7c9c;
+}
+
+main {
+  padding: 0 80px;
+}
+
+.main-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.main-head h3 {
+  color: #43425d;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+button {
+  cursor: pointer;
+  background-color: #3b86ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: #69a2ff;
 }

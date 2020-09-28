@@ -1,9 +1,14 @@
 import React from 'react';
 
-const Menu = () => {
+const Menu = ({ history }) => {
     return (
         <main>
-            Menu
+            <section className="main-head">
+                <h3>Menu</h3>
+                <div>
+                    <button onClick={() => history.push('/AddMenuItem')}>Add menu item</button>
+                </div>
+            </section>
         </main>
     )
 }
