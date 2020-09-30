@@ -1,20 +1,20 @@
 import React from 'react'
 
-const ItemCard = () => {
+const ItemCard = ({ type, name, price, photo }) => {
     return (
         <div className="item-card">
             <div
                 style={{
-                    background: `url('${require('../assets/pizza.jpg')}') no-repeat center`
+                    background: `url('${photo}') no-repeat center`
                 }}
                 className="card-img"
             />
             <div className="card-info">
                 <div>
-                    <h4>MAIN COURSE</h4>
-                    <h3>Pizza Margherita</h3>
+                    <h4>{type}</h4>
+                    <h3>{name}</h3>
                 </div>
-                <h5>$5</h5>
+                <h5>${price}</h5>
             </div>
         </div>
     )
