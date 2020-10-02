@@ -11,8 +11,8 @@ const App = () => {
       <Header />
       <Switch>
         <Route exact path='/' component={Menu} />
-        <Route path='/AddMenuItem' component={AddMenuItem} />
-        <Route path='/AddMenuItem/:itemId' component={AddMenuItem} />
+        <Route exact path='/AddMenuItem' component={AddMenuItem} />
+        <Route exact path='/AddMenuItem/:itemId' component={AddMenuItem} />
       </Switch>
     </BrowserRouter>
   );

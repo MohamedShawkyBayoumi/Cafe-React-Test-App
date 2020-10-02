@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 const ADD_MENU_ITEM = gql`
     mutation AddMenuItem($type: String!, $name: String!, $price: Int!, $photo: String!) {
@@ -12,15 +12,33 @@ const ADD_MENU_ITEM = gql`
   }
 `;
 
+const FETCH_MENU_ITEM = gql`
+    query GetMenuItem ($_id: String!){
+        item(_id: $_id) {
+            _id
+            type
+            name
+            price
+            photo
+        }
+    }
+`;
 
-const AddMenuItem = () => {
+
+const AddMenuItem = ({ match }) => {
+    let itemId = match.params.itemId;
     const [values, setValues] = useState({
         type: 'Side',
         name: '',
         price: '',
-        photo: {}
+        photo: ''
     });
-    const [addItem, { data }] = useMutation(ADD_MENU_ITEM);
+
+    
+
+    const [addItem] = useMutation(ADD_MENU_ITEM);
+    const { loading, error, data } = useQuery(FETCH_MENU_ITEM, { variables: { _id: itemId } });
+    console.log('data', data)
 
     const onChangeFile = async ({
         target: {
@@ -70,7 +88,6 @@ const AddMenuItem = () => {
             const { type, name, price, photo } = values;
             e.preventDefault();
             console.log('values', values)
-            // let res = await addItem({ variables: { type, name, price, photo } });
             console.log('photo before sent', photo)
             if(photo) {
                 let res = await addItem({ variables: { type, name, price: Number(price), photo } });
@@ -81,6 +98,27 @@ const AddMenuItem = () => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        (async () => {
+            try {
+        
+                if(data){
+                    const { type, name, price, photo } = data.item;
+                    setValues({
+                        ...values,
+                        type,
+                        name,
+                        price,
+                        photo
+                    })
+                }
+                
+            } catch (error) {
+                console.log(error)
+            }    
+        })();
+    }, [data]);
 
     return (
         <main>

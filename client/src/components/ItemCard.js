@@ -6,10 +6,6 @@ const REMOVE_MENU_ITEM = gql`
     mutation RemoveMenuItem($_id: String!) {
     removeItem(_id: $_id) {
         _id
-        # type
-        # name
-        # price
-        # photo
     }
   }
 `;
@@ -23,6 +19,7 @@ const ItemCard = ({ _id, type, name, price, photo, history }) => {
         try {
             let res = await removeItem({ variables: { _id } });
             console.log('res', res)
+            window.location.reload();
         } catch (error) {
             console.log(error)
         }

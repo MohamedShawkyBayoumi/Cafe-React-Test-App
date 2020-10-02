@@ -3,6 +3,10 @@ const Items = require('./models/items');
 const resolvers = {
     Query: {
         items: () => Items.find(),
+        item: async (_, {_id}) => {
+            let res = await Items.findOne({ _id })
+            return res;
+        }
     },
     Mutation: {
         addItem: async(_, { type, name, price, photo }) => {

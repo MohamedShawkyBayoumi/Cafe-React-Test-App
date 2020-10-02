@@ -3,6 +3,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
     type Query {
         items: [Item!]!
+        item(_id: String!): Item
     }
 
     type Mutation {
