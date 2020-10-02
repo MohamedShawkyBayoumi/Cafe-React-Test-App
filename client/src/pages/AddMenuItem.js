@@ -12,6 +12,18 @@ const ADD_MENU_ITEM = gql`
   }
 `;
 
+const EDIT_MENU_ITEM = gql`
+    mutation EditMenuItem($_id: String!, $type: String!, $name: String!, $price: Int!, $photo: String!) {
+    updateItem(_id: $_id, type: $type, name: $name, price: $price, photo: $photo) {
+        _id
+        type
+        name
+        price
+        photo
+    }
+  }
+`;
+
 const FETCH_MENU_ITEM = gql`
     query GetMenuItem ($_id: String!){
         item(_id: $_id) {
@@ -37,6 +49,7 @@ const AddMenuItem = ({ match }) => {
     
 
     const [addItem] = useMutation(ADD_MENU_ITEM);
+    const [updateItem] = useMutation(EDIT_MENU_ITEM);
     const { loading, error, data } = useQuery(FETCH_MENU_ITEM, { variables: { _id: itemId } });
     console.log('data', data)
 
@@ -87,11 +100,14 @@ const AddMenuItem = ({ match }) => {
         try {
             const { type, name, price, photo } = values;
             e.preventDefault();
-            console.log('values', values)
-            console.log('photo before sent', photo)
             if(photo) {
-                let res = await addItem({ variables: { type, name, price: Number(price), photo } });
-                console.log('res.data.addItem', res.data.addItem)
+                if(itemId){
+                    let res = await updateItem({ variables: { _id: itemId, type, name, price: Number(price), photo } });
+                    console.log('update', res)
+                } else {
+                    let res = await addItem({ variables: { type, name, price: Number(price), photo } });
+                    console.log('res.data.addItem', res.data.addItem)
+                }
 
             }
         } catch (error) {
@@ -118,7 +134,7 @@ const AddMenuItem = ({ match }) => {
                 console.log(error)
             }    
         })();
-    }, [data]);
+    }, [data, itemId]);
 
     return (
         <main>
@@ -155,7 +171,9 @@ const AddMenuItem = ({ match }) => {
                         </div>
                     </div>
                     <div className="form-row">
-                        <button type='submit'>Save Item</button>
+                        <button type='submit'>
+                            {itemId ? 'Edit Item' : 'Save Item'}
+                        </button>
                     </div>
                 </section>
             </form>

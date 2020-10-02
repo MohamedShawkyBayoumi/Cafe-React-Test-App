@@ -19,7 +19,13 @@ const resolvers = {
             return res;
         },
         updateItem: async(_, { _id, type, name, price, photo }) => {
-            console.log('_id', _id)
+            try {
+                console.log('_id', _id)
+                let res = await Items.updateOne({ _id }, { $set: { type, name, price, photo } })
+                console.log('res updatingggggg', res)
+            } catch (error) {
+                console.log(error)
+            }
         }
        
     }
