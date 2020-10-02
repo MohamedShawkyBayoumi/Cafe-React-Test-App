@@ -1,38 +1,29 @@
 {
   "name": "cafe-react-test-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@apollo/client": "^3.2.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "apollo-upload-client": "^14.1.2",
-    "graphql": "^15.3.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3"
-  },
+  "version": "1.0.0",
+  "description": "Backend for Cafe React App",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "node server",
+    "server": "nodemon server"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MohamedShawkyBayoumi/Cafe-React-Test-App.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "Mohamed Shawky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MohamedShawkyBayoumi/Cafe-React-Test-App/issues"
+  },
+  "homepage": "https://github.com/MohamedShawkyBayoumi/Cafe-React-Test-App#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.18.1",
+    "concurrently": "^5.3.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "mongoose": "^5.10.7",
+    "nodemon": "^2.0.4"
   }
 }
