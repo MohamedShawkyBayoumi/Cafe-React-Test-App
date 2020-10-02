@@ -15,4 +15,4 @@ const server = new ApolloServer({
 
 server.applyMiddleware({app});
 
-app.listen(4000, () => console.log(`Express Server Now Running`))
+app.listen(4000, () => console.log(`Express GraphQL Server Now Running on localhost:4000/graphql`))

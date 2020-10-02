@@ -12,6 +12,7 @@ const ADD_MENU_ITEM = gql`
   }
 `;
 
+
 const AddMenuItem = () => {
     const [values, setValues] = useState({
         type: 'Side',

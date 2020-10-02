@@ -5,7 +5,7 @@ import { useQuery, gql } from '@apollo/client';
 const MENU_LIST = gql`
     query GetMenuItems {
         items {
-            # id
+            _id
             type
             name
             price

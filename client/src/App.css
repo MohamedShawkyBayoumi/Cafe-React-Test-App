@@ -75,6 +75,17 @@ button:hover {
   align-items: center;
 }
 
+.card-info button {
+  margin-right: 10px;
+  background: none;
+  color: #3b86ff;
+  padding: 0;
+}
+
+.card-info button:last-child {
+  color: red;
+}
+
 .card-info h4,
 .card-info h3,
 .card-info h5 {
