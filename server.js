@@ -1,10 +1,18 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const { ApolloServer } = require('apollo-server-express');
+const { typeDefs } = require('./typeDefs');
+const { resolvers } = require('./resolver');
 
 connectDB();
 
 const app = express();
 
-app.get('/', (req, res) => res.send('Hello World!'))
+const server = new ApolloServer({
+    typeDefs,
+    resolvers
+})
+
+server.applyMiddleware({app});
 
 app.listen(4000, () => console.log(`Express Server Now Running`))
