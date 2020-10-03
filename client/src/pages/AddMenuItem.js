@@ -3,77 +3,78 @@ import { useMutation, useQuery } from '@apollo/client';
 import { ADD_MENU_ITEM, EDIT_MENU_ITEM, FETCH_MENU_ITEM } from '../gql/quieries';
 
 const AddMenuItem = ({ match, history }) => {
-    const itemId = match.params.itemId;
-    const [values, setValues] = useState({
-        type: 'Side',
-        name: '',
-        price: '',
-        photo: ''
-    });
+    const itemId = match.params.itemId,
+        [values, setValues] = useState({
+            type: 'Side',
+            name: '',
+            price: '',
+            photo: ''
+        }),
+        [isLoadingPhoto, setIsLoadingPhoto] = useState(false),
+        [addItem] = useMutation(ADD_MENU_ITEM),
+        [updateItem] = useMutation(EDIT_MENU_ITEM),
+        { loading, error, data } = useQuery(FETCH_MENU_ITEM, { variables: { _id: itemId } }),
 
-    const [addItem] = useMutation(ADD_MENU_ITEM);
-    const [updateItem] = useMutation(EDIT_MENU_ITEM);
-    const { loading, error, data } = useQuery(FETCH_MENU_ITEM, { variables: { _id: itemId } });
+        onChangeFile = async ({
+            target: {
+            validity,
+            files: [file],
+            },
+        }) => {
+            try {
+                if (validity.valid) {
+                    setValues({
+                        ...values,
+                        photo: file
+                    })
 
-    const onChangeFile = async ({
-        target: {
-          validity,
-          files: [file],
-        },
-      }) => {
-        try {
-            if (validity.valid) {
-                setValues({
-                    ...values,
-                    photo: file
-                })
+                    let data = new FormData();
+                    data.append('file', file)
+                    data.append('upload_preset', 'reactcafe')
 
-                let data = new FormData();
-                data.append('file', file)
-                data.append('upload_preset', 'reactcafe')
+                    setIsLoadingPhoto(true)
+                    let res = await fetch('https://api.cloudinary.com/v1_1/dymelpf7v/image/upload', {
+                        method: 'POST',
+                        body: data
+                    })
 
-                let res = await fetch('https://api.cloudinary.com/v1_1/dymelpf7v/image/upload', {
-                    method: 'POST',
-                    body: data
-                })
-
-                let fileJson = await res.json();
-                setValues({
-                    ...values,
-                    photo: fileJson.secure_url
-                })
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const onChange = (value, e) => {
-        setValues({
-            ...values,
-            [value]: e.target.value
-        })
-    }
-
-    const onSubmit = async (e) => {
-        try {
-            const { type, name, price, photo } = values;
-            e.preventDefault();
-            if(photo && type && name && price) {
-                if(itemId){
-                    await updateItem({ variables: { _id: itemId, type, name, price: Number(price), photo } });
-                } else {
-                    await addItem({ variables: { type, name, price: Number(price), photo } });
+                    let fileJson = await res.json();
+                    setValues({
+                        ...values,
+                        photo: fileJson.secure_url
+                    })
+                    setIsLoadingPhoto(false)
                 }
 
-                history.push('/')
-                window.location.reload()
+            } catch (error) {
+                console.log(error)
             }
-        } catch (error) {
-            console.log(error)
+        },
+
+        onChange = (value, e) => {
+            setValues({
+                ...values,
+                [value]: e.target.value
+            })
+        },
+        onSubmit = async (e) => {
+            try {
+                const { type, name, price, photo } = values;
+                e.preventDefault();
+                if(photo && type && name && price && !isLoadingPhoto) {
+                    if(itemId){
+                        await updateItem({ variables: { _id: itemId, type, name, price: Number(price), photo } });
+                    } else {
+                        await addItem({ variables: { type, name, price: Number(price), photo } });
+                    }
+
+                    history.push('/')
+                    window.location.reload()
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
-    }
 
     useEffect(() => {
         let isMounted = true;
