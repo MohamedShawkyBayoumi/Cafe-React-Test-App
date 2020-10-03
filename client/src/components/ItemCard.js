@@ -5,16 +5,15 @@ import { REMOVE_MENU_ITEM } from '../gql/quieries';
 
 const ItemCard = ({ _id, type, name, price, photo, history }) => {
 
-    const [removeItem] = useMutation(REMOVE_MENU_ITEM);
-
-    const deleteItem = async _id => {
-        try {
-            await removeItem({ variables: { _id } });
-            window.location.reload();
-        } catch (error) {
-            console.log(error)
+    const [removeItem] = useMutation(REMOVE_MENU_ITEM),
+        deleteItem = async _id => {
+            try {
+                await removeItem({ variables: { _id } });
+                window.location.reload();
+            } catch (error) {
+                console.log(error)
+            }
         }
-    }
     return (
         <div className="item-card">
             <div
