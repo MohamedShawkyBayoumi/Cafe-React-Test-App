@@ -1,24 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { gql, useMutation } from '@apollo/client';
-
-const REMOVE_MENU_ITEM = gql`
-    mutation RemoveMenuItem($_id: String!) {
-    removeItem(_id: $_id) {
-        _id
-    }
-  }
-`;
-
+import { useMutation } from '@apollo/client';
+import { REMOVE_MENU_ITEM } from '../gql/quieries';
 
 const ItemCard = ({ _id, type, name, price, photo, history }) => {
 
-    const [removeItem, { data }] = useMutation(REMOVE_MENU_ITEM);
+    const [removeItem] = useMutation(REMOVE_MENU_ITEM);
 
     const deleteItem = async _id => {
         try {
-            let res = await removeItem({ variables: { _id } });
-            console.log('res', res)
+            await removeItem({ variables: { _id } });
             window.location.reload();
         } catch (error) {
             console.log(error)

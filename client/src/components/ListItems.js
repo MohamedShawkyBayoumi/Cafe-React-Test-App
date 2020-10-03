@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ItemCard from '../components/ItemCard';
-import { useQuery, gql } from '@apollo/client';
-
-const MENU_LIST = gql`
-    query GetMenuItems {
-        items {
-            _id
-            type
-            name
-            price
-            photo
-        }
-    }
-`;
+import { useLazyQuery } from '@apollo/client';
+import { MENU_LIST } from '../gql/quieries';
 
 function ListItems() {
-    const { loading, error, data } = useQuery(MENU_LIST);
+    const [getItems, { loading, error, data }] = useLazyQuery(MENU_LIST)
+
+    useEffect(() => {
+        let isMounted = true;
+        if(isMounted) {
+            getItems();
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [data])
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
 
     return (
         <section className="cards-wrapper">
-            {data.items.length > 0 && data.items.map((item, index) => (
+            {data && data.items.length > 0 && data.items.map((item, index) => (
                 <ItemCard key={index} {...item} />
             ))}
         </section>

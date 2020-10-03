@@ -1,44 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { ADD_MENU_ITEM, EDIT_MENU_ITEM, FETCH_MENU_ITEM } from '../gql/quieries';
 
-const ADD_MENU_ITEM = gql`
-    mutation AddMenuItem($type: String!, $name: String!, $price: Int!, $photo: String!) {
-    addItem(type: $type, name: $name, price: $price, photo: $photo) {
-        type
-        name
-        price
-        photo
-    }
-  }
-`;
-
-const EDIT_MENU_ITEM = gql`
-    mutation EditMenuItem($_id: String!, $type: String!, $name: String!, $price: Int!, $photo: String!) {
-    updateItem(_id: $_id, type: $type, name: $name, price: $price, photo: $photo) {
-        _id
-        type
-        name
-        price
-        photo
-    }
-  }
-`;
-
-const FETCH_MENU_ITEM = gql`
-    query GetMenuItem ($_id: String!){
-        item(_id: $_id) {
-            _id
-            type
-            name
-            price
-            photo
-        }
-    }
-`;
-
-
-const AddMenuItem = ({ match }) => {
-    let itemId = match.params.itemId;
+const AddMenuItem = ({ match, history }) => {
+    const itemId = match.params.itemId;
     const [values, setValues] = useState({
         type: 'Side',
         name: '',
@@ -46,12 +11,9 @@ const AddMenuItem = ({ match }) => {
         photo: ''
     });
 
-    
-
     const [addItem] = useMutation(ADD_MENU_ITEM);
     const [updateItem] = useMutation(EDIT_MENU_ITEM);
     const { loading, error, data } = useQuery(FETCH_MENU_ITEM, { variables: { _id: itemId } });
-    console.log('data', data)
 
     const onChangeFile = async ({
         target: {
@@ -61,7 +23,6 @@ const AddMenuItem = ({ match }) => {
       }) => {
         try {
             if (validity.valid) {
-                console.log('file', file)
                 setValues({
                     ...values,
                     photo: file
@@ -77,7 +38,6 @@ const AddMenuItem = ({ match }) => {
                 })
 
                 let fileJson = await res.json();
-                console.log('file fetched', fileJson)
                 setValues({
                     ...values,
                     photo: fileJson.secure_url
@@ -100,15 +60,15 @@ const AddMenuItem = ({ match }) => {
         try {
             const { type, name, price, photo } = values;
             e.preventDefault();
-            if(photo) {
+            if(photo && type && name && price) {
                 if(itemId){
-                    let res = await updateItem({ variables: { _id: itemId, type, name, price: Number(price), photo } });
-                    console.log('update', res)
+                    await updateItem({ variables: { _id: itemId, type, name, price: Number(price), photo } });
                 } else {
-                    let res = await addItem({ variables: { type, name, price: Number(price), photo } });
-                    console.log('res.data.addItem', res.data.addItem)
+                    await addItem({ variables: { type, name, price: Number(price), photo } });
                 }
 
+                history.push('/')
+                window.location.reload()
             }
         } catch (error) {
             console.log(error)
@@ -116,25 +76,32 @@ const AddMenuItem = ({ match }) => {
     }
 
     useEffect(() => {
+        let isMounted = true;
         (async () => {
             try {
         
                 if(data){
                     const { type, name, price, photo } = data.item;
-                    setValues({
-                        ...values,
-                        type,
-                        name,
-                        price,
-                        photo
-                    })
+                    if(isMounted){
+                        setValues({
+                            ...values,
+                            type,
+                            name,
+                            price,
+                            photo
+                        })
+                    }
                 }
                 
             } catch (error) {
                 console.log(error)
             }    
         })();
-    }, [data, itemId]);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [data]);
 
     return (
         <main>
